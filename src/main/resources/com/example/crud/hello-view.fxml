@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.crud.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <TableView fx:id="tableView">
+        <columns>
+            <TableColumn fx:id="tasksIntegerTableColumn" text="ID"/>
+            <TableColumn fx:id="taskDescriptionColumn" text="Task Description" />
+            <TableColumn fx:id="taskTitleColumn" text="Tasks"/>
+            <TableColumn fx:id="taskStatusColumn" text="Status"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="customText"/>
+    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+
+
+    <Button text="Add Task" onAction="#addTaskButtonClick"/>
+
+
+    <Button text="Delete Task" onAction="#deleteTaskButtonClick"/>
+
+
+    <Button text="Edit Task" onAction="#editTaskButtonClick"/>
+
+
+    <Button text="Mark Task" onAction="#markTaskButtonClick"/>
+
+</VBox>
