@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.time.LocalDate;
 
@@ -13,7 +14,7 @@ public class HelloController {
 
     @FXML
     private Label customText;
-    TextField
+
     @FXML
     private TableView<Tasks> tableView;
     @FXML
@@ -32,10 +33,24 @@ public class HelloController {
 
     @FXML
     private void initialize() {
+        tableView.setEditable(true); // Enable editing on the Tableview
+
+        // Creating columns for the tables
         taskTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
         taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         tasksIntegerTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        // Using TextFieldTableCell for the task title column
+        taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        // Handle edit commit for the task title
+        taskTitleColumn.setOnEditCommit(event -> {
+            Tasks task = event.getRowValue();
+            task.setTitle(event.getNewValue()); // Update the task's title
+        });
+
+        // Set items for the TableView
         tableView.setItems(tasksList);
     }
 
