@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.crud.HelloController">
     <padding>
@@ -21,20 +22,25 @@
             <TableColumn fx:id="taskStatusColumn" text="Status"/>
         </columns>
     </TableView>
-
     <Label fx:id="customText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    <HBox alignment="CENTER" spacing="10.0">
+        <Button text="Hello!" onAction="#onHelloButtonClick"/>
 
 
-    <Button text="Add Task" onAction="#addTaskButtonClick"/>
+        <Button text="Add Task" onAction="#addTaskButtonClick"/>
 
 
-    <Button text="Delete Task" onAction="#deleteTaskButtonClick"/>
+        <Button text="Delete Task" onAction="#deleteTaskButtonClick"/>
 
 
-    <Button text="Edit Task" onAction="#editTaskButtonClick"/>
+        <Button text="Edit Task" onAction="#editTaskButtonClick"/>
 
 
-    <Button text="Mark Task" onAction="#markTaskButtonClick"/>
+        <Button text="Mark Task" onAction="#markTaskButtonClick"/>
+
+    </HBox>
+
+
+
 
 </VBox>
