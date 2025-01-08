@@ -14,7 +14,8 @@ public class HelloController {
 
     @FXML
     private Label customText;
-
+    @FXML
+    private TextField textField;
     @FXML
     private TableView<Tasks> tableView;
     @FXML
@@ -25,6 +26,8 @@ public class HelloController {
     private TableColumn<Tasks, String> taskDescriptionColumn;
     @FXML
     private TableColumn<Tasks, Integer> tasksIntegerTableColumn;
+
+
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
             new Tasks(1, "Task 1", TaskStatus.PENDING),
@@ -62,7 +65,9 @@ public class HelloController {
 
     @FXML
     protected void addTaskButtonClick(){
-        customText.setText("I can add tasks");
+        Tasks task = new Tasks(tasksList.size()+1, textField.getText(), TaskStatus.PENDING);
+        System.out.println(tasksList.add(task) ? "Task as been added" : "No task has been added");
+        tableView.setItems(tasksList);
     }
     @FXML
     protected void deleteTaskButtonClick(){
