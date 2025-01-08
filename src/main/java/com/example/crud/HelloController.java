@@ -5,10 +5,13 @@ import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.time.LocalDate;
+
+import static com.example.crud.TaskStatus.*;
 
 public class HelloController {
 
@@ -30,8 +33,8 @@ public class HelloController {
 
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
-            new Tasks(1, "Task 1", TaskStatus.PENDING),
-            new Tasks(2, "Random task", TaskStatus.COMPLETED)
+            new Tasks(1, "Task 1", PENDING),
+            new Tasks(2, "Random task", COMPLETED)
     );
 
     @FXML
@@ -46,11 +49,20 @@ public class HelloController {
 
         // Using TextFieldTableCell for the task title column
         taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        taskStatusColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
+                FXCollections.observableArrayList( TaskStatus.values()) // Using enum constants
+        ));
 
         // Handle edit commit for the task title
         taskTitleColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
-            task.setTitle(event.getNewValue()); // Update the task's title
+            task.setTitle(event.getNewValue()); // Update the task's title cell
+        });
+
+        //Handle edit commit for the task status
+        taskStatusColumn.setOnEditCommit(event -> {
+            Tasks task = event.getRowValue();
+            task.setTaskStatus(event.getNewValue());
         });
 
         // Set items for the TableView
@@ -58,6 +70,7 @@ public class HelloController {
     }
 
     @FXML
+    // TODO: Remove this method
     protected void onHelloButtonClick() {
 
         customText.setText("Welcome to JavaFX Application!");
@@ -65,8 +78,9 @@ public class HelloController {
 
     @FXML
     protected void addTaskButtonClick(){
-        Tasks task = new Tasks(tasksList.size()+1, textField.getText(), TaskStatus.PENDING);
+        Tasks task = new Tasks(tasksList.size()+1, textField.getText(), PENDING);
         System.out.println(tasksList.add(task) ? "Task as been added" : "No task has been added");
+        textField.clear();
         tableView.setItems(tasksList);
     }
     @FXML
@@ -74,6 +88,7 @@ public class HelloController {
         customText.setText("I can delete tasks");
     }
     @FXML
+    // TODO: Remove this method
     protected void editTaskButtonClick(){
         customText.setText("I can edit tasks");
     }
