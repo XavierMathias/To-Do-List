@@ -55,9 +55,6 @@ public class HelloController {
         taskSelectedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskSelectedColumn));
         taskSelectedColumn.setEditable(true);
 
-
-
-
         // Using TextFieldTableCell for the task title column
         taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         taskStatusColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
