@@ -7,13 +7,21 @@ public class Tasks {
     private int id;
     private static int idCounter = 0;
     private String title;
-    private String description;
+    private boolean selected = false;
     private TaskStatus taskStatus;
 
     public Tasks(int id, String title, TaskStatus status){
         this.id = id;
         this.title = title;
         taskStatus = status;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public int getId() {
@@ -30,14 +38,6 @@ public class Tasks {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getTaskStatus() {

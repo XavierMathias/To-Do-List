@@ -21,7 +21,7 @@
     <TableView fx:id="tableView">
         <columns>
             <TableColumn fx:id="tasksIntegerTableColumn" text="ID"/>
-            <TableColumn fx:id="taskDescriptionColumn" text="Task Description" />
+            <TableColumn fx:id="taskSelectedColumn" text="Selected"/>
             <TableColumn fx:id="taskTitleColumn" text="Tasks"/>
             <TableColumn fx:id="taskStatusColumn" text="Status"/>
         </columns>
@@ -32,16 +32,10 @@
 
     <HBox alignment="CENTER" spacing="10.0">
 
-        <Button text="Hello!" onAction="#onHelloButtonClick"/>
-
-
         <Button text="Add Task" onAction="#addTaskButtonClick"/>
 
 
         <Button text="Delete Task" onAction="#deleteTaskButtonClick"/>
-
-
-        <Button text="Edit Task" onAction="#editTaskButtonClick"/>
 
 
         <Button text="Mark Task" onAction="#markTaskButtonClick"/>

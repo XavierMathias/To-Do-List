@@ -5,6 +5,7 @@ import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -16,8 +17,6 @@ import static com.example.crud.TaskStatus.*;
 public class HelloController {
 
     @FXML
-    private Label customText;
-    @FXML
     private TextField textField;
     @FXML
     private TableView<Tasks> tableView;
@@ -26,10 +25,11 @@ public class HelloController {
     @FXML
     private TableColumn<Tasks, TaskStatus> taskStatusColumn;
     @FXML
-    private TableColumn<Tasks, String> taskDescriptionColumn;
+    private TableColumn<Tasks, Boolean> taskSelectedColumn;
     @FXML
     private TableColumn<Tasks, Integer> tasksIntegerTableColumn;
 
+    private CheckBox selectTask;
 
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
@@ -43,9 +43,13 @@ public class HelloController {
 
         // Creating columns for the tables
         taskTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        taskSelectedColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
         taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
-        taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         tasksIntegerTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        taskSelectedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskSelectedColumn));
+        taskSelectedColumn.setEditable(true);
+
 
         // Using TextFieldTableCell for the task title column
         taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -70,13 +74,6 @@ public class HelloController {
     }
 
     @FXML
-    // TODO: Remove this method
-    protected void onHelloButtonClick() {
-
-        customText.setText("Welcome to JavaFX Application!");
-    }
-
-    @FXML
     protected void addTaskButtonClick(){
         Tasks task = new Tasks(tasksList.size()+1, textField.getText(), PENDING);
         System.out.println(tasksList.add(task) ? "Task as been added" : "No task has been added");
@@ -85,16 +82,11 @@ public class HelloController {
     }
     @FXML
     protected void deleteTaskButtonClick(){
-        customText.setText("I can delete tasks");
-    }
-    @FXML
-    // TODO: Remove this method
-    protected void editTaskButtonClick(){
-        customText.setText("I can edit tasks");
+
     }
     @FXML
     protected void markTaskButtonClick(){
-        customText.setText("I can mark tasks");
+
     }
 
 
