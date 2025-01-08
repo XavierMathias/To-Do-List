@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 import static com.example.crud.TaskStatus.*;
 
@@ -34,7 +35,11 @@ public class HelloController {
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
             new Tasks(1, "Task 1", PENDING),
-            new Tasks(2, "Random task", COMPLETED)
+            new Tasks(2, "Random task", COMPLETED),
+            new Tasks(3, "Task 2", IN_PROGRESS),
+            new Tasks(4, "Fourth task", COMPLETED),
+            new Tasks(5, "girggle", IN_PROGRESS),
+            new Tasks(6, "tasksssss", PENDING)
     );
 
     @FXML
@@ -46,16 +51,23 @@ public class HelloController {
         taskSelectedColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
         taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
         tasksIntegerTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
+        taskSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().selectedProperty());
         taskSelectedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskSelectedColumn));
         taskSelectedColumn.setEditable(true);
+
+
 
 
         // Using TextFieldTableCell for the task title column
         taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         taskStatusColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
-                FXCollections.observableArrayList( TaskStatus.values()) // Using enum constants
+                FXCollections.observableArrayList( values()) // Using enum constants
         ));
+
+        taskSelectedColumn.setOnEditCommit(event -> {
+            Tasks task = event.getRowValue();
+            task.setSelected(event.getNewValue());
+        });
 
         // Handle edit commit for the task title
         taskTitleColumn.setOnEditCommit(event -> {
@@ -82,7 +94,28 @@ public class HelloController {
     }
     @FXML
     protected void deleteTaskButtonClick(){
+        System.out.println("Task delete button pressed");
+        for (Tasks task : tasksList) {
+            System.out.println(task.toString());
+        }
 
+
+        ObservableList<Tasks> selectedTasks = FXCollections.observableArrayList(
+                tableView.getItems()
+                        .stream()
+                        .filter(task -> task.getSelected())
+                        .collect(Collectors.toList())
+        );
+
+        if (selectedTasks.isEmpty()){
+            System.out.println("This list is empty");
+            } else {
+            for (Tasks task : selectedTasks) {
+                System.out.println("task '" + task.getTitle() + "' is " + task.getSelected() + " selected");
+            }
+        }
+        tasksList.removeAll(selectedTasks);
+        tableView.setItems(tasksList);
     }
     @FXML
     protected void markTaskButtonClick(){

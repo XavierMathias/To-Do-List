@@ -1,27 +1,45 @@
 package com.example.crud;
 
+import javafx.beans.property.*;
+
 import java.time.LocalDate;
 
 public class Tasks {
 
     private int id;
     private static int idCounter = 0;
-    private String title;
-    private boolean selected = false;
-    private TaskStatus taskStatus;
+    private final StringProperty title = new SimpleStringProperty();
+    private BooleanProperty selected = new SimpleBooleanProperty();
+    private ObjectProperty<TaskStatus> taskStatus = new SimpleObjectProperty<>();
 
     public Tasks(int id, String title, TaskStatus status){
         this.id = id;
-        this.title = title;
-        taskStatus = status;
+        this.title.set(title);
+        this.taskStatus.set(status);
+        this.selected.set(false);
+
     }
 
-    public boolean isSelected() {
-        return selected;
+    @Override
+    public String toString() {
+        return "Tasks{" +
+                "id=" + id +
+                ", title=" + title +
+                ", selected=" + selected +
+                ", taskStatus=" + taskStatus +
+                '}';
+    }
+
+    public boolean getSelected() {
+        return selected.get();
     }
 
     public void setSelected(boolean selected) {
-        this.selected = selected;
+        this.selected.set(selected);
+    }
+
+    public BooleanProperty selectedProperty() {
+        return selected;
     }
 
     public int getId() {
@@ -33,18 +51,18 @@ public class Tasks {
     }
 
     public String getTitle() {
-        return title;
+        return this.title.get();
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title.set(title);
     }
 
     public String getTaskStatus() {
-        return taskStatus.getDescription();
+        return this.taskStatus.get().getDescription();
     }
 
     public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
+        this.taskStatus.set(taskStatus);
     }
 }
