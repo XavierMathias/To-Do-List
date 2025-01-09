@@ -26,8 +26,9 @@ public class DatabaseConnection {
                 CREATE TABLE IF NOT EXISTS tasks (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100),
-                si_selected BOOLEAN
-                )
+                is_selected BOOLEAN,
+                status task_status
+                );
                 """; // creating the command for create a table if this table doesn't exist
 
         try (Connection conn = connect();
@@ -36,6 +37,20 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createTaskStatus(){
+        String sql = """
+                CREATE TYPE task_status AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED');
+                """;
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()){ // creates the command statement
+            stmt.execute(sql); // sends the command the server
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // this method will INSERT a task
