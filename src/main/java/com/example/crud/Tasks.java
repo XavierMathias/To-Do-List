@@ -26,7 +26,7 @@ public class Tasks {
                 "id=" + id +
                 ", title=" + title +
                 ", selected=" + selected +
-                ", taskStatus=" + taskStatus +
+                ", taskStatus=" + taskStatus.getName() +
                 '}';
     }
 
@@ -58,8 +58,8 @@ public class Tasks {
         this.title.set(title);
     }
 
-    public String getTaskStatus() {
-        return this.taskStatus.get().getDescription();
+    public TaskStatus getTaskStatus() {
+        return this.taskStatus.get();
     }
 
     public void setTaskStatus(TaskStatus taskStatus) {

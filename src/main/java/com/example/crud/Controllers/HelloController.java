@@ -71,6 +71,8 @@ public class HelloController {
             task.setSelected(event.getNewValue());
         });
 
+        //TODO : write code to listen for checkbox and stores it in psql table
+
         // Handle edit commit for the task title
         taskTitleColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
@@ -85,6 +87,13 @@ public class HelloController {
 
         // Set items for the TableView
         tableView.setItems(tasksList);
+
+        for (Tasks task: tasksList) {
+            // TODO: If this task exists in the DB, do not insert and print that task exists
+            DatabaseConnection.insertTask(task.getId(), task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
+
+        }
+
     }
 
     @FXML

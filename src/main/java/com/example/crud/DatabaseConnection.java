@@ -54,19 +54,53 @@ public class DatabaseConnection {
     }
 
     // this method will INSERT a task
-    public static void insertTask(String name, boolean selected){
-        String sql = "INSERT INTO tasks(name, selected) VALUES (?,?)";
+    public static void insertTask(int id, String name, boolean selected, TaskStatus status){
+        String sql = "INSERT INTO tasks(id, name, is_selected, status) VALUES (?,?,?,?::task_status)"; // cast to task_status
+
 
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
-            pstmt.setString(1, name);
-            pstmt.setBoolean(2, selected);
-            pstmt.executeUpdate();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            // Check if taskID exists before proceeding
+            if(taskIDExist(id)){
+                System.out.println("This taskId " + id + " already exists");
+            } else {
+                pstmt.setInt(1, id);
+                pstmt.setString(2, name);
+                pstmt.setBoolean(3, selected);
+                pstmt.setString(4, status.name());
+
+                pstmt.executeUpdate(); // Proceed with insert if ID doesn't exist
+                System.out.println("Added taskId" + id + " to database");
+            }
+
+
         } catch (SQLException e){
             e.printStackTrace();
         }
 
+    } // end of method
+
+    public static boolean taskIDExist(int id){
+        System.out.println("Checking if task exists");
+        String sql = "SELECT EXISTS (SELECT 1 FROM tasks WHERE id = ?)";
+
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getBoolean(1); // returns true if record exists, false otherwise
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+
+
     }
+
+
 
 
 } // end of class
