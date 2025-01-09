@@ -1,5 +1,7 @@
-package com.example.crud;
+package com.example.crud.Controllers;
 
+import com.example.crud.TaskStatus;
+import com.example.crud.Tasks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
