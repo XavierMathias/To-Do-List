@@ -61,6 +61,7 @@ public class HelloController {
                 FXCollections.observableArrayList( values()) // Using enum constants
         ));
 
+        // Handles edit commit for tasks that has a checkbox checked
         taskSelectedColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
             task.setSelected(event.getNewValue());
@@ -92,26 +93,20 @@ public class HelloController {
     @FXML
     protected void deleteTaskButtonClick(){
         System.out.println("Task delete button pressed");
-        for (Tasks task : tasksList) {
-            System.out.println(task.toString());
-        }
-
 
         ObservableList<Tasks> selectedTasks = FXCollections.observableArrayList(
                 tableView.getItems()
                         .stream()
-                        .filter(task -> task.getSelected())
+                        .filter(task -> task.getSelected()) // Filters tasks that has been marked checked
                         .collect(Collectors.toList())
         );
 
-        if (selectedTasks.isEmpty()){
-            System.out.println("This list is empty");
-            } else {
-            for (Tasks task : selectedTasks) {
-                System.out.println("task '" + task.getTitle() + "' is " + task.getSelected() + " selected");
-            }
-        }
         tasksList.removeAll(selectedTasks);
+
+        for (int element = 0; element < tasksList.size(); element++) {
+            tasksList.get(element).setId(element+1);
+        }
+
         tableView.setItems(tasksList);
     }
     @FXML
