@@ -70,12 +70,14 @@ public class HelloController {
             task.setSelected(event.getNewValue());
         });
 
-        //TODO : write code to listen for checkbox and stores it in psql table
 
         // Handle edit commit for the task title
         taskTitleColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
+            String oldTaskName = task.getTitle();
             task.setTitle(event.getNewValue()); // Update the task's title cell
+            System.out.println("New task name is " + task.getTitle() + " the status is " + task.getTaskStatus());
+            DatabaseConnection.updateTask(oldTaskName, task);
         });
 
         //Handle edit commit for the task status

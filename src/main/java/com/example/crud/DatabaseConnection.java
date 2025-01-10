@@ -53,7 +53,7 @@ public class DatabaseConnection {
     } // end of method
 
     public static void deleteTask(String taskName){
-        String sql = "DELETE FROM tasks WHERE name = ?:w;";
+        String sql = "DELETE FROM tasks WHERE name = ?;";
 
         try(Connection conn = connect()){
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -66,6 +66,23 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     } // end of method
+
+    public static void updateTask(String oldTaskName, Tasks task){
+        String sql = "UPDATE tasks SET name = ?, status = ? WHERE name = ?;";
+
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            pstmt.setString(1, task.getTitle());
+            pstmt.setObject(2, task.getTaskStatus().name(), Types.OTHER);
+            pstmt.setString(3, oldTaskName);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
 
     // this method will INSERT a task
     public static void insertTask( String name, boolean selected, TaskStatus status){
