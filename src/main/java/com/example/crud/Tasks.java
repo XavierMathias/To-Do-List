@@ -11,9 +11,10 @@ public class Tasks {
     private BooleanProperty selected = new SimpleBooleanProperty();
     private ObjectProperty<TaskStatus> taskStatus = new SimpleObjectProperty<>();
 
-    public Tasks(String title, TaskStatus status){
+    public Tasks(String title, boolean selected, TaskStatus status){
         this.title.set(title);
         this.taskStatus.set(status);
+        this.selected.set(selected);
 
     }
 

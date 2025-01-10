@@ -38,12 +38,12 @@ public class HelloController {
 
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
-            new Tasks("Task 1", PENDING),
-            new Tasks("Random task",  COMPLETED),
-            new Tasks("Task 2",  IN_PROGRESS),
-            new Tasks("Fourth task",  COMPLETED),
-            new Tasks("girggle",  IN_PROGRESS),
-            new Tasks("tasksssss",  PENDING)
+            new Tasks("Task 1", false, PENDING),
+            new Tasks("Random task",  false, COMPLETED),
+            new Tasks("Task 2",  false, IN_PROGRESS),
+            new Tasks("Fourth task",  false, COMPLETED),
+            new Tasks("girggle",  false, IN_PROGRESS),
+            new Tasks("tasksssss",  false, PENDING)
     );
 
     @FXML
@@ -96,7 +96,7 @@ public class HelloController {
 
     @FXML
     protected void addTaskButtonClick(){
-        Tasks task = new Tasks(textField.getText(), PENDING); //
+        Tasks task = new Tasks(textField.getText(), false, PENDING); //
         DatabaseConnection.insertTask(task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
         System.out.println(tasksList.add(task) ? "Task as been added" : "No task has been added");
         textField.clear();
@@ -112,6 +112,10 @@ public class HelloController {
                         .filter(task -> task.getSelected()) // Filters tasks that has been marked checked
                         .collect(Collectors.toList())
         );
+
+        for (Tasks task : selectedTasks) {
+            DatabaseConnection.deleteTask(task.getTitle());
+        }
 
         tasksList.removeAll(selectedTasks);
 
