@@ -38,12 +38,12 @@ public class HelloController {
 
 
     private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
-            new Tasks(1, "Task 1", PENDING),
-            new Tasks(2, "Random task", COMPLETED),
-            new Tasks(3, "Task 2", IN_PROGRESS),
-            new Tasks(4, "Fourth task", COMPLETED),
-            new Tasks(5, "girggle", IN_PROGRESS),
-            new Tasks(6, "tasksssss", PENDING)
+            new Tasks("Task 1", PENDING),
+            new Tasks("Random task",  COMPLETED),
+            new Tasks("Task 2",  IN_PROGRESS),
+            new Tasks("Fourth task",  COMPLETED),
+            new Tasks("girggle",  IN_PROGRESS),
+            new Tasks("tasksssss",  PENDING)
     );
 
     @FXML
@@ -54,7 +54,6 @@ public class HelloController {
         taskTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         taskSelectedColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
         taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
-        tasksIntegerTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         taskSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().selectedProperty());
         taskSelectedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskSelectedColumn));
         taskSelectedColumn.setEditable(true);
@@ -89,8 +88,7 @@ public class HelloController {
         tableView.setItems(tasksList);
 
         for (Tasks task: tasksList) {
-            // TODO: If this task exists in the DB, do not insert and print that task exists
-            DatabaseConnection.insertTask(task.getId(), task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
+            DatabaseConnection.insertTask(task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
 
         }
 
@@ -98,7 +96,8 @@ public class HelloController {
 
     @FXML
     protected void addTaskButtonClick(){
-        Tasks task = new Tasks(tasksList.size()+1, textField.getText(), PENDING);
+        Tasks task = new Tasks(textField.getText(), PENDING); //
+        DatabaseConnection.insertTask(task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
         System.out.println(tasksList.add(task) ? "Task as been added" : "No task has been added");
         textField.clear();
         tableView.setItems(tasksList);
@@ -115,10 +114,6 @@ public class HelloController {
         );
 
         tasksList.removeAll(selectedTasks);
-
-        for (int element = 0; element < tasksList.size(); element++) {
-            tasksList.get(element).setId(element+1);
-        }
 
         tableView.setItems(tasksList);
     }

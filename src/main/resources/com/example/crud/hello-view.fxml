@@ -20,7 +20,6 @@
 
     <TableView fx:id="tableView">
         <columns>
-            <TableColumn fx:id="tasksIntegerTableColumn" text="ID"/>
             <TableColumn fx:id="taskSelectedColumn" text="Selected"/>
             <TableColumn fx:id="taskTitleColumn" text="Tasks"/>
             <TableColumn fx:id="taskStatusColumn" text="Status"/>

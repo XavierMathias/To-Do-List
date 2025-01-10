@@ -24,8 +24,7 @@ public class DatabaseConnection {
     public static void createTasksTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS tasks (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(100),
+                name VARCHAR(500),
                 is_selected BOOLEAN,
                 status task_status
                 );
@@ -54,35 +53,29 @@ public class DatabaseConnection {
     }
 
     // this method will INSERT a task
-    public static void insertTask(int id, String name, boolean selected, TaskStatus status){
-        String sql = "INSERT INTO tasks(id, name, is_selected, status) VALUES (?,?,?,?::task_status)"; // cast to task_status
+    public static void insertTask( String name, boolean selected, TaskStatus status){
+        String sql = "INSERT INTO tasks(name, is_selected, status) VALUES (?,?,?::task_status)"; // cast to task_status
 
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)){
 
-            // Check if taskID exists before proceeding
-            if(taskIDExist(id)){
-                System.out.println("This taskId " + id + " already exists");
-            } else {
-                pstmt.setInt(1, id);
-                pstmt.setString(2, name);
-                pstmt.setBoolean(3, selected);
-                pstmt.setString(4, status.name());
-
+                pstmt.setString(1, name);
+                pstmt.setBoolean(2, selected);
+                pstmt.setString(3, status.name());
                 pstmt.executeUpdate(); // Proceed with insert if ID doesn't exist
-                System.out.println("Added taskId" + id + " to database");
-            }
+                System.out.println("Added taskId" + name + " to database");
 
 
         } catch (SQLException e){
             e.printStackTrace();
         }
 
+
     } // end of method
 
     public static boolean taskIDExist(int id){
-        System.out.println("Checking if task exists");
+        System.out.println("Checking if taskId exists");
         String sql = "SELECT EXISTS (SELECT 1 FROM tasks WHERE id = ?)";
 
         try(Connection conn = connect();
