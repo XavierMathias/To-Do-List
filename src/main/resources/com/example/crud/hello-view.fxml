@@ -36,8 +36,6 @@
         <Button text="Delete Task" onAction="#deleteTaskButtonClick"/>
 
 
-        <Button text="Mark Task" onAction="#markTaskButtonClick"/>
-
     </HBox>
 
 

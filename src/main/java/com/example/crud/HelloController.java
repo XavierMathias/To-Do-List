@@ -117,11 +117,6 @@ public class HelloController {
 
         tableView.setItems(tasksList);
     }
-    @FXML
-    protected void markTaskButtonClick(){
-
-    }
-
 
 
 }
