@@ -76,14 +76,19 @@ public class HelloController {
             Tasks task = event.getRowValue();
             String oldTaskName = task.getTitle();
             task.setTitle(event.getNewValue()); // Update the task's title cell
-            System.out.println("New task name is " + task.getTitle() + " the status is " + task.getTaskStatus());
+            System.out.println("Old name was "+ oldTaskName+ " New task name is " + task.getTitle() + " the status is " + task.getTaskStatus().name());
             DatabaseConnection.updateTask(oldTaskName, task);
         });
 
         //Handle edit commit for the task status
         taskStatusColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
+            String oldTaskName = task.getTitle();
             task.setTaskStatus(event.getNewValue());
+            System.out.println("New status is " + task.getTaskStatus().name());
+            DatabaseConnection.updateTask(oldTaskName, task);
+
+
         });
 
         // Set items for the TableView

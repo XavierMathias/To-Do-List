@@ -83,6 +83,28 @@ public class DatabaseConnection {
 
     }
 
+    public static void updateTask(Tasks oldTask, Tasks newTask){
+        String sql = "UPDATE tasks SET name = ?, status = ? WHERE name = ? AND status = ?;";
+
+        System.out.println("UPDATE tasks SET name = " + newTask.getTitle()
+                + ", status = "+ newTask.getTaskStatus().name()
+                +" WHERE name = "+ oldTask.getTitle()
+                +" AND status = "+ oldTask.getTaskStatus().name()+";");
+
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            pstmt.setString(1, newTask.getTitle());
+            pstmt.setObject(2, newTask.getTaskStatus().name(), Types.OTHER);
+            pstmt.setString(3, oldTask.getTitle());
+            pstmt.setObject(4, oldTask.getTaskStatus().name(), Types.OTHER);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
 
     // this method will INSERT a task
     public static void insertTask( String name, boolean selected, TaskStatus status){
