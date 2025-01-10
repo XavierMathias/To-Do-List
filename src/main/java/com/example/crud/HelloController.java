@@ -1,4 +1,5 @@
-package com.example.crud.Controllers;
+package com.example.crud;
+
 
 import com.example.crud.DatabaseConnection;
 import com.example.crud.TaskStatus;
@@ -30,33 +31,27 @@ public class HelloController {
     private TableColumn<Tasks, TaskStatus> taskStatusColumn;
     @FXML
     private TableColumn<Tasks, Boolean> taskSelectedColumn;
-    @FXML
-    private TableColumn<Tasks, Integer> tasksIntegerTableColumn;
 
     private CheckBox selectTask;
 
 
 
-    private ObservableList<Tasks> tasksList = FXCollections.observableArrayList(
-            new Tasks("Task 1", false, PENDING),
-            new Tasks("Random task",  false, COMPLETED),
-            new Tasks("Task 2",  false, IN_PROGRESS),
-            new Tasks("Fourth task",  false, COMPLETED),
-            new Tasks("girggle",  false, IN_PROGRESS),
-            new Tasks("tasksssss",  false, PENDING)
-    );
+    private ObservableList<Tasks> tasksList;
 
     @FXML
     private void initialize() {
+
         tableView.setEditable(true); // Enable editing on the Tableview
+
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Creating columns for the tables
         taskTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        taskSelectedColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
         taskStatusColumn.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
         taskSelectedColumn.setCellValueFactory(cellData -> cellData.getValue().selectedProperty());
         taskSelectedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskSelectedColumn));
         taskSelectedColumn.setEditable(true);
+
 
         // Using TextFieldTableCell for the task title column
         taskTitleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -74,30 +69,24 @@ public class HelloController {
         // Handle edit commit for the task title
         taskTitleColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
-            String oldTaskName = task.getTitle();
+            String taskName = task.getTitle();
             task.setTitle(event.getNewValue()); // Update the task's title cell
-            System.out.println("Old name was "+ oldTaskName+ " New task name is " + task.getTitle() + " the status is " + task.getTaskStatus().name());
-            DatabaseConnection.updateTask(oldTaskName, task);
+            DatabaseConnection.updateTask(taskName, task);
         });
 
         //Handle edit commit for the task status
         taskStatusColumn.setOnEditCommit(event -> {
             Tasks task = event.getRowValue();
-            String oldTaskName = task.getTitle();
+            String taskName = task.getTitle();
             task.setTaskStatus(event.getNewValue());
-            System.out.println("New status is " + task.getTaskStatus().name());
-            DatabaseConnection.updateTask(oldTaskName, task);
+            DatabaseConnection.updateTask(taskName, task);
 
 
         });
 
+        tasksList = FXCollections.observableArrayList(DatabaseConnection.getAllTasks());
         // Set items for the TableView
         tableView.setItems(tasksList);
-
-        for (Tasks task: tasksList) {
-            DatabaseConnection.insertTask(task.getTitle(), task.selectedProperty().get(), task.getTaskStatus());
-
-        }
 
     }
 

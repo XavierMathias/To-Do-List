@@ -11,7 +11,7 @@
 <?import javafx.scene.control.cell.TextFieldListCell?>
 <?import javafx.scene.control.TextField?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.crud.Controllers.HelloController">
+      fx:controller="com.example.crud.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -25,7 +25,6 @@
             <TableColumn fx:id="taskStatusColumn" text="Status"/>
         </columns>
     </TableView>
-    <Label fx:id="customText"/>
 
     <TextField fx:id="textField" alignment="CENTER"></TextField>
 

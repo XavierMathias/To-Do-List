@@ -2,6 +2,8 @@ package com.example.crud;
 
 import javafx.beans.property.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Tasks {
@@ -17,6 +19,8 @@ public class Tasks {
         this.selected.set(selected);
 
     }
+
+    public Tasks(){}
 
     @Override
     public String toString() {

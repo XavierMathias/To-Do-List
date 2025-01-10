@@ -1,6 +1,8 @@
 package com.example.crud;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection {
 
@@ -19,6 +21,28 @@ public class DatabaseConnection {
     // this method creates a connection with server, using the URL of the server, username and password
     public static Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, username, password);
+    }
+
+    public static List<Tasks> getAllTasks(){
+        List<Tasks> tasksList = new ArrayList<>();
+        String sql = "SELECT name, is_selected, status FROM tasks";
+
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()){
+
+            while (rs.next()){
+               Tasks task = new Tasks();
+               task.setTitle(rs.getString("name"));
+               task.setSelected(rs.getBoolean("is_selected"));
+               task.setTaskStatus(TaskStatus.valueOf(rs.getString("status")));
+               tasksList.add(task);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return tasksList;
     }
 
     public static void createTasksTable(){
@@ -62,6 +86,7 @@ public class DatabaseConnection {
             pstmt.executeUpdate();
             System.out.println("Task " + taskName + " is deleted");
 
+
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -82,29 +107,6 @@ public class DatabaseConnection {
         }
 
     }
-
-    public static void updateTask(Tasks oldTask, Tasks newTask){
-        String sql = "UPDATE tasks SET name = ?, status = ? WHERE name = ? AND status = ?;";
-
-        System.out.println("UPDATE tasks SET name = " + newTask.getTitle()
-                + ", status = "+ newTask.getTaskStatus().name()
-                +" WHERE name = "+ oldTask.getTitle()
-                +" AND status = "+ oldTask.getTaskStatus().name()+";");
-
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
-
-            pstmt.setString(1, newTask.getTitle());
-            pstmt.setObject(2, newTask.getTaskStatus().name(), Types.OTHER);
-            pstmt.setString(3, oldTask.getTitle());
-            pstmt.setObject(4, oldTask.getTaskStatus().name(), Types.OTHER);
-            pstmt.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-
-    }
-
 
     // this method will INSERT a task
     public static void insertTask( String name, boolean selected, TaskStatus status){
@@ -127,27 +129,5 @@ public class DatabaseConnection {
 
 
     } // end of method
-
-    public static boolean taskIDExist(int id){
-        System.out.println("Checking if taskId exists");
-        String sql = "SELECT EXISTS (SELECT 1 FROM tasks WHERE id = ?)";
-
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()){
-                return rs.getBoolean(1); // returns true if record exists, false otherwise
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-
-
-    }
-
-
-
 
 } // end of class
